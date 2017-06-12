@@ -1,3 +1,41 @@
+// MOVE THIS VARIABLE SOMEWHERE IN THE SCRIPT WITHIN YOUR PAGE TO HAVE CONTROL
+var MAPHIGHLIGHT_ROUND_CORNER_VALUE = 15;
+
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+	if (typeof stroke == 'undefined') {
+		stroke = true;
+	}
+	if (typeof radius === 'undefined') {
+		radius = 5;
+	}
+	if (typeof radius === 'number') {
+		radius = {tl: radius, tr: radius, br: radius, bl: radius};
+	} else {
+		var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+		for (var side in defaultRadius) {
+			radius[side] = radius[side] || defaultRadius[side];
+		}
+	}
+	ctx.beginPath();
+	ctx.moveTo(x + radius.tl, y);
+	ctx.lineTo(x + width - radius.tr, y);
+	ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+	ctx.lineTo(x + width, y + height - radius.br);
+	ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+	ctx.lineTo(x + radius.bl, y + height);
+	ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+	ctx.lineTo(x, y + radius.tl);
+	ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+	ctx.closePath();
+	if (fill) {
+		ctx.fill();
+	}
+	if (stroke) {
+		ctx.stroke();
+	}
+
+}
+
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
@@ -43,7 +81,13 @@
 			context.beginPath();
 			if(shape == 'rect') {
 				// x, y, width, height
-				context.rect(coords[0] + x_shift, coords[1] + y_shift, coords[2] - coords[0], coords[3] - coords[1]);
+				var _radius = 15;
+				if (typeof MAPHIGHLIGHT_ROUND_CORNER_VALUE === 'number') {
+					_radius = MAPHIGHLIGHT_ROUND_CORNER_VALUE;
+					roundRect(context, coords[0] + x_shift, coords[1] + y_shift, coords[2] - coords[0], coords[3] - coords[1], _radius, false, true);
+				}else{
+					context.rect(coords[0] + x_shift, coords[1] + y_shift, coords[2] - coords[0], coords[3] - coords[1]);
+				}
 			} else if(shape == 'poly') {
 				context.moveTo(coords[0] + x_shift, coords[1] + y_shift);
 				for(i=2; i < coords.length; i+=2) {
