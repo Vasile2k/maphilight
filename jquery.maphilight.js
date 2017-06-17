@@ -1,6 +1,9 @@
 // MOVE THIS VARIABLE SOMEWHERE IN THE SCRIPT WITHIN YOUR PAGE TO HAVE CONTROL
 var MAPHIGHLIGHT_ROUND_CORNER_VALUE = 15;
 
+// FUNCTION TAKEN FROM Juan Mendes ON STACKOVERFLOW
+// https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas#answer-3368118
+//
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
 	if (typeof stroke == 'undefined') {
 		stroke = true;
